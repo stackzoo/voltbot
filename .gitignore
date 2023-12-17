@@ -1,0 +1,7 @@
+# macos
+.DS_Store
+
+# test files
+macaroon.hex
+tls.cert
+creds
