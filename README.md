@@ -1,0 +1,2 @@
+# voltbot
+Lightning node bot
