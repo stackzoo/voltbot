@@ -3,6 +3,7 @@ package lightning
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"os"
 
@@ -32,15 +33,46 @@ func NewMacaroonCredentials(macaroon []byte) credentials.PerRPCCredentials {
 	}
 }
 
+// Config represents the configuration for Lightning node connection.
+type Config struct {
+	RPCServerAddress string `json:"lnd_node_endpoint"`
+	TLSCert          string `json:"lnd_node_tls_cert_path"`
+	Macaroon         string `json:"lnd_node_macaroon_hex_path"`
+	SlackToken       string `json:"slack_token"`
+	SlackChannelID   string `json:"slack_channel_id"`
+}
+
+// LoadConfig reads the configuration from the voltbot_config.json file.
+func LoadConfig() (*Config, error) {
+	configFile := "config/voltbot_config.json"
+	data, err := os.ReadFile(configFile)
+	if err != nil {
+		return nil, err
+	}
+
+	var config Config
+	if err := json.Unmarshal(data, &config); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
+
 // Run establishes a connection to the Lightning node and prints node information.
-func Run() {
-	// Replace these values with your Lightning node's details
-	rpcServerAddress := "umbrel.local:10009"
-	tlsCertPath := "tls.cert"
-	macaroonPath := "macaroon.hex" // Update with your actual macaroon filename
+func Run() (*Config, *lnrpc.GetInfoResponse, error) {
+	// Load the configuration
+	config, err := LoadConfig()
+	if err != nil {
+		log.Fatalf("Error loading configuration: %v", err)
+	}
+
+	// Use config values
+	rpcServerAddress := config.RPCServerAddress
+	TLSCert := config.TLSCert
+	Macaroon := config.Macaroon
 
 	// Load the TLS certificate for a secure connection
-	creds, err := credentials.NewClientTLSFromFile(tlsCertPath, "")
+	creds, err := credentials.NewClientTLSFromFile(TLSCert, "")
 	if err != nil {
 		log.Fatalf("Error loading TLS certificate: %v", err)
 	}
@@ -58,7 +90,7 @@ func Run() {
 	defer conn.Close()
 
 	// Load the macaroon for authentication
-	macaroonBytes, err := os.ReadFile(macaroonPath)
+	macaroonBytes, err := os.ReadFile(Macaroon)
 	if err != nil {
 		log.Fatalf("Error reading macaroon file: %v", err)
 	}
@@ -85,61 +117,6 @@ func Run() {
 		log.Fatalf("Error retrieving node info: %v", err)
 	}
 
-	// Print the retrieved information
-	log.Printf("Node Alias: %s\n", nodeInfo.IdentityAddress)
-	log.Printf("Node Public Key: %s\n", nodeInfo.LightningId)
-	log.Printf("Node Active channels: %v\n", nodeInfo.NumActiveChannels)
-}
-
-// GetNodeInfo retrieves information about the Lightning node.
-func GetNodeInfo() (*lnrpc.GetInfoResponse, error) {
-	// Replace these values with your Lightning node's details
-	rpcServerAddress := "umbrel.local:10009"
-	tlsCertPath := "tls.cert"
-	macaroonPath := "macaroon.hex" // Update with your actual macaroon filename
-
-	// Load the TLS certificate for a secure connection
-	creds, err := credentials.NewClientTLSFromFile(tlsCertPath, "")
-	if err != nil {
-		return nil, err
-	}
-
-	// Create gRPC dial options with TLS credentials
-	opts := []grpc.DialOption{
-		grpc.WithTransportCredentials(creds),
-	}
-
-	// Create a gRPC connection to the Lightning node
-	conn, err := grpc.Dial(rpcServerAddress, opts...)
-	if err != nil {
-		return nil, err
-	}
-	defer conn.Close()
-
-	// Load the macaroon for authentication
-	macaroonBytes, err := os.ReadFile(macaroonPath)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create a new gRPC context with the macaroon
-	ctx := context.Background()
-	perRPCCredentials := NewMacaroonCredentials(macaroonBytes)
-	opts = append(opts, grpc.WithPerRPCCredentials(perRPCCredentials))
-
-	conn, err = grpc.Dial(rpcServerAddress, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create an lnrpc Lightning client
-	client := lnrpc.NewLightningClient(conn)
-
-	// Get node info
-	nodeInfo, err := client.GetInfo(ctx, &lnrpc.GetInfoRequest{})
-	if err != nil {
-		return nil, err
-	}
-
-	return nodeInfo, nil
+	log.Printf("Node info: %v", nodeInfo)
+	return config, nodeInfo, nil
 }

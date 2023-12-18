@@ -5,3 +5,6 @@
 macaroon.hex
 tls.cert
 creds
+
+# config file
+voltbot_config.json

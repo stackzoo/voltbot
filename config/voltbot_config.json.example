@@ -1,0 +1,7 @@
+{
+    "lnd_node_endpoint": "<node-endpoint:port>",
+    "lnd_node_tls_cert_path": "config/tls.cert",
+    "lnd_node_macaroon_hex_path": "config/macaroon.hex",
+    "slack_channel_id": "<slack-channel-id>",
+    "slack_token": "<slack-token>"
+}
