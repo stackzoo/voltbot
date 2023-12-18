@@ -1,5 +1,6 @@
 # VOLTBOT
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Report Card](https://goreportcard.com/badge/github.com/stackzoo/voltbot)](https://goreportcard.com/report/github.com/stackzoo/voltbot)  
 <img src="images/voltbot-logo-nobg.png" alt="logo" width="160"/>
 
 Lightning node bot ⚡🤖
