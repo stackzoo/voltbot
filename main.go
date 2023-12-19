@@ -11,7 +11,7 @@ func main() {
 	slack.Run()
 
 	// Create a ticker that triggers every 1 minute
-	ticker := time.NewTicker(1 * time.Minute)
+	ticker := time.NewTicker(1440  * time.Minute)
 
 	// Run the slack.Run() function each time the ticker triggers
 	for range ticker.C {
