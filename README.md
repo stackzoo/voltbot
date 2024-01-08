@@ -54,7 +54,9 @@ docker run -v "/your/local/config/path/config:/config" ghcr.io/stackzoo/voltbot:
 
 >[!Note]
 > You can also pull the Image compiled for ARM architecture, for example if you want to run the bot on a raspberry pi or another edge device.  
-> In order to do that you just need to use the "-arm" tag, for example: `docker pull ghcr.io/stackzoo/voltbot:0.0.5-arm`
+> In order to do that you just need to use the "-arm" tag, for example: `docker pull ghcr.io/stackzoo/voltbot:0.0.5-arm`  
+
+All the published Images can be found [here](https://github.com/stackzoo/voltbot/pkgs/container/voltbot).
 
 
 ## Example
