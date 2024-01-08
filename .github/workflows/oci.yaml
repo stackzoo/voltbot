@@ -7,9 +7,6 @@ on:
 
 permissions:
   contents: write
-  # packages: write
-  # issues: write
-
 
 jobs:
   goreleaser:
@@ -24,7 +21,6 @@ jobs:
           go-version: stable
       - uses: goreleaser/goreleaser-action@v4
         with:
-          # either 'goreleaser' (default) or 'goreleaser-pro':
           distribution: goreleaser
           version: latest
           args: release --clean
@@ -57,8 +53,14 @@ jobs:
           echo ${{steps.tagger.outputs.version}}
           echo ${{steps.tagger.outputs.version-without-v}}
 
-      - name: Build the OCI Image
+      - name: Build the OCI Image (x86_64)
         run: docker build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }} .
+        working-directory: .
+
+      - name: Build the ARM OCI Image
+        run: |
+          docker buildx create --use
+          docker buildx build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}-arm --platform linux/arm64 .
         working-directory: .
 
       - name: Log into ghcr
@@ -68,5 +70,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push the OCI Image
+      - name: Push the OCI Image (x86_64)
         run: docker push ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}
+
+      - name: Push the ARM OCI Image
+        run: docker push ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}-arm
