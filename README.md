@@ -1,6 +1,8 @@
 # VOLTBOT
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Go Report Card](https://goreportcard.com/badge/github.com/stackzoo/voltbot)](https://goreportcard.com/report/github.com/stackzoo/voltbot)  
+[![oci](https://github.com/stackzoo/voltbot/actions/workflows/oci.yaml/badge.svg)](https://github.com/stackzoo/voltbot/actions/workflows/oci.yaml)
+[![Latest Release](https://img.shields.io/github/release/stackzoo/voltbot.svg)](https://github.com/stackzoo/voltbot/releases/latest)
+[![Go Report Card](https://goreportcard.com/badge/github.com/stackzoo/voltbot)](https://goreportcard.com/report/github.com/stackzoo/voltbot)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 <img src="images/voltbot-logo-nobg.png" alt="logo" width="160"/>
 
 Lightning node bot ⚡🤖
@@ -35,6 +37,21 @@ You can take a look at the example file inside the `config` folder:
 }
 ```  
 At present, the retrieval of statistics is hard-coded to occur every *360 minutes* (6 hours).  
+
+### Run with docker
+The project includes a GitHub Action that publishes an OCI image (container) to the GitHub registry when a new version is tagged.  
+Consequently, it is possible to run the project directly as a container.  
+  
+  
+Pull the image:  
+```console
+docker pull ghcr.io/stackzoo/voltbot:0.0.2
+```  
+And the run the container by mapping the local folder that contains the configuration files:  
+```console
+docker run -v "/your/local/config/path/config:/config" ghcr.io/stackzoo/voltbot:0.0.2
+```  
+
 
 ## Example
 
