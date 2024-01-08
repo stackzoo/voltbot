@@ -1,0 +1,7 @@
+# .dockerignore
+# ignore everything except the following files
+*
+!go.mod
+!go.sum
+!main.go
+!internal/

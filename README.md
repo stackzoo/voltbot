@@ -15,9 +15,8 @@ Lightning node bot ⚡🤖
 
 ## Abstract
 Voltbot is a lightweight bot that retrieves lightning node stats and send them via different channels.  
-This can be beneficial for executing and monitoring nodes.  
+This can be beneficial for monitoring node instances.  
 Voltbot communicates with the *LND* instance through [gRPC](https://grpc.io/).  
-
 
 
 
@@ -35,7 +34,7 @@ You can take a look at the example file inside the `config` folder:
     "slack_token": "<slack-token>"
 }
 ```  
-At present, the retrieval of statistics is hard-coded to occur every *1440 minutes* (24 hours).  
+At present, the retrieval of statistics is hard-coded to occur every *360 minutes* (6 hours).  
 
 ## Example
 
