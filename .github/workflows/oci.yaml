@@ -53,8 +53,15 @@ jobs:
           echo ${{steps.tagger.outputs.version}}
           echo ${{steps.tagger.outputs.version-without-v}}
 
+      - name: Log into ghcr
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build the OCI Image (x86_64)
-        run: docker build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }} .
+        run: docker build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }} --push .
         working-directory: .
 
       - name: Build the ARM OCI Image
@@ -63,16 +70,3 @@ jobs:
           docker buildx build -t ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}-arm --platform linux/arm64 --push .
         working-directory: .
 
-
-      - name: Log into ghcr
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push the OCI Image (x86_64)
-        run: docker push ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}
-
-      - name: Push the ARM OCI Image
-        run: docker push ghcr.io/${{ steps.lowercase.outputs.name }}:${{ steps.tagger.outputs.version-without-v }}-arm
