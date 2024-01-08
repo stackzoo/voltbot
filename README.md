@@ -52,6 +52,10 @@ And the run the container by mapping the local folder that contains the configur
 docker run -v "/your/local/config/path/config:/config" ghcr.io/stackzoo/voltbot:0.0.2
 ```  
 
+>[!Note]
+> You can also pull the Image compiled for ARM architecture, for example if you want to run the bot on a raspberry pi or another edge device.  
+> In order to do that you just need to use the "-arm" tag, for example: `docker pull ghcr.io/stackzoo/voltbot:0.0.5-arm`
+
 
 ## Example
 
