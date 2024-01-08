@@ -45,11 +45,11 @@ Consequently, it is possible to run the project directly as a container.
   
 Pull the image:  
 ```console
-docker pull ghcr.io/stackzoo/voltbot:0.0.2
+docker pull ghcr.io/stackzoo/voltbot:0.0.5
 ```  
 And the run the container by mapping the local folder that contains the configuration files:  
 ```console
-docker run -v "/your/local/config/path/config:/config" ghcr.io/stackzoo/voltbot:0.0.2
+docker run -v "/your/local/config/path/config:/config" ghcr.io/stackzoo/voltbot:0.0.5
 ```  
 
 >[!Note]
